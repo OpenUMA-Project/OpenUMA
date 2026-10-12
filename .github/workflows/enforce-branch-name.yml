@@ -1,0 +1,20 @@
+name: Enforce Branch Naming Convention
+
+on:
+  pull_request:
+    branches:
+      - development
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify Branch Name
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          if [[ ! "$BRANCH_NAME" =~ ^feat/.*$ ]]; then
+            echo "::error::Invalid branch name: $BRANCH_NAME"
+            echo "Branch names must start with 'feat/'"
+            exit 1
+          fi
+          echo "Branch name $BRANCH_NAME meets requirements."
